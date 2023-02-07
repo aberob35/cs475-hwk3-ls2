@@ -10,7 +10,8 @@
 // Global Variable Declarations
 int counter = 0;
 // TODO: function definitions here for ls2
-void recDirectoryOpenerM1(char *dName){
+void recDirectoryOpenerM1(char *dName)
+{
     // Creating necessary tools to traverse through directories
     char *directPath;
     struct dirent *dp;
@@ -18,13 +19,15 @@ void recDirectoryOpenerM1(char *dName){
     DIR *dir = opendir(dName);
 
     // Way to test to see if directory is accesible
-    if (!dir){
+    if (!dir)
+    {
         // printf("Input an actual directory \n");
         return;
     }
 
     // Recursion and Outputted messages
-    while ((dp = readdir(dir)) != NULL){
+    while ((dp = readdir(dir)) != NULL)
+    {
         directPath = malloc(strlen(dName) + strlen(dp->d_name) + 2);
 
         // Making a new direcotry path
@@ -32,15 +35,18 @@ void recDirectoryOpenerM1(char *dName){
         strcat(directPath, "/");
         strcat(directPath, dp->d_name);
 
-        //helper to get size in bytes
+        // helper to get size in bytes
         lstat(dp->d_name, &st);
         int size = st.st_size;
         mode_t mode = st.st_mode;
 
-        if (S_ISDIR(mode) != 0){
-            if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0){
+        if (S_ISDIR(mode) != 0)
+        {
+            if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+            {
                 // push(s, dp->d_name);
-                for (int i = 0; i < counter; i++){
+                for (int i = 0; i < counter; i++)
+                {
                     printf("\t");
                 }
                 counter++;
@@ -49,7 +55,8 @@ void recDirectoryOpenerM1(char *dName){
                 counter--;
             }
         }
-        else if(S_ISREG(mode)){
+        else if (S_ISREG(mode))
+        {
             // push(s, dp->d_name);
             for (int i = 0; i < counter; i++)
             {
@@ -63,18 +70,17 @@ void recDirectoryOpenerM1(char *dName){
     closedir(dir);
 }
 
-
-
 void recDirectoryOpenerM2(char *dName, char *fname){
     // Creating necessary tools to traverse through directories
     char *directPath;
     struct dirent *dp;
     struct stat st;
     DIR *dir = opendir(dName);
-    //stack_t *s = initstack();
+    // stack_t *s = initstack();
 
-    // Way to test to see if directory is accesible
-    if (!dir){
+    //Way to test to see if directory is accesible
+    if (!dir)
+    {
         return;
     }
 
@@ -87,33 +93,46 @@ void recDirectoryOpenerM2(char *dName, char *fname){
         strcat(directPath, "/");
         strcat(directPath, dp->d_name);
 
-        //helper to get size in bytes
-        lstat(dp->d_name, &st);
+        // helper to get size in bytes
+        lstat(directPath, &st);
         int size = st.st_size;
         mode_t mode = st.st_mode;
 
         if (S_ISDIR(mode) != 0){
-            if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0){
-                for (int i = 0; i < counter; i++){
+            if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
+               char *directPath2 = malloc(strlen(directPath) + strlen(fname) + 2);
+
+                // Making a new direcotry path
+                strcpy(directPath2, directPath);
+                strcat(directPath2, "/");
+                strcat(directPath2, fname);
+
+                if(stat(directPath2, &st) == 0){
+                    for (int i = 0; i < counter; i++)
+                {
                     printf("\t");
                 }
                 counter++;
                 printf("%s/ (%s) \n", dp->d_name, "Directory");
                 recDirectoryOpenerM2(directPath, fname);
                 counter--;
+                } else{
+                recDirectoryOpenerM2(directPath, fname);
+                }
+                free(directPath2);
+               
             }
-        }
-        else if(S_ISREG(mode)){
+        }else if (S_ISREG(mode)){
             // push(s, dp->d_name);
-            if(strcmp(dp->d_name, fname) == 0){
+            if (strcmp(dp->d_name, fname) == 0){
                 for (int i = 0; i < counter; i++)
-            {
-                printf("\t");
-            }
-            printf("%s (%d) \n", dp->d_name, size);
+                {
+                    printf("\t");
+                }
+                printf("%s (%d) \n", dp->d_name, size);
             }
         }
-        //free data so no leaks occur
+        // free data so no leaks occur
         free(directPath);
     }
     // Closing directory so no memeory leaks occur
