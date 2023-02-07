@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	} else if(argc > 3 ){
 		printf("Too many things to search for");
 	} else if(argc <= 1){
-		printf("Too little things inputted for program to run");
+		printf("Too little things to search for");
 	}
 	
 	// //stack stores the lines to print out
