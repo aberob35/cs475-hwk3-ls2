@@ -10,6 +10,12 @@
 // Global Variable Declarations
 int counter = 0;
 // TODO: function definitions here for ls2
+/**
+ * @param name of directory to parse
+ * This recurses through directories and outputs all subdirectories and the files in them
+ * 
+ */
+
 void recDirectoryOpenerM1(char *dName)
 {
     // Creating necessary tools to traverse through directories
@@ -57,7 +63,6 @@ void recDirectoryOpenerM1(char *dName)
         }
         else if (S_ISREG(mode))
         {
-            // push(s, dp->d_name);
             for (int i = 0; i < counter; i++)
             {
                 printf("\t");
@@ -70,6 +75,12 @@ void recDirectoryOpenerM1(char *dName)
     closedir(dir);
 }
 
+
+/**
+ * @param dName name of directory to parse.
+ * @param fname specific file name to get see if directories have. 
+ * 
+ */
 void recDirectoryOpenerM2(char *dName, char *fname){
     // Creating necessary tools to traverse through directories
     char *directPath;
@@ -122,8 +133,8 @@ void recDirectoryOpenerM2(char *dName, char *fname){
                 free(directPath2);
                
             }
+        // if it is a file then print out file
         }else if (S_ISREG(mode)){
-            // push(s, dp->d_name);
             if (strcmp(dp->d_name, fname) == 0){
                 for (int i = 0; i < counter; i++)
                 {
